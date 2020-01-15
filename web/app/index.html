@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
+
+    <title>Bee Alive</title>
+    <base href="/">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600|Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" type="text/css" href="./app/theme.css">
+    <link rel="stylesheet" type="text/css" href="./app/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div id="livestream">
+            <div class="container" v-if="stream.available">
+                <video :src="stream.source"></video>
+            </div>
+            <div class="standby" v-if="!stream.available">
+                <div class="cover">
+                    <h3>Livestream Offline :(</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="livedata">
+            <h2>Live-Daten</h2>
+            <!-- Placeholder data, remove later -->
+            <div class="row">
+                <dataset name="Außentemperatur" value="8°C"></dataset>
+                <dataset name="Innentemperatur" value="23°C"></dataset>
+                <dataset name="Weitere Daten" value="1234"></dataset>
+            </div>
+            <div class="row">
+                <span style="padding-bottom: 30px;">Platz für graphen, etc</span>
+            </div>
+        </div>
+    </div>
+
+    <template id="t-dataset">
+        <div class="dataset">
+            <span class="value" v-text="value"></span>
+            <span class="name" v-text="name"></span>
+        </div>
+    </template>
+    
+    <script src="./app/app.js"></script>
+    <!-- <script src="./app/util.js"></script> -->
+    <script src="./app/main.js"></script>
+</body>
+</html>
