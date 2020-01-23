@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BeeAlive Demo Thing</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>BeeAlive Demo</h1>
+        <div>
+            <label for="val1">Außentemp.</label>
+            <input id="val1" v-model="val1">
+        </div>
+        <div>
+            <label for="val2">Innentemp.</label>
+            <input id="val2" v-model="val2">
+        </div>
+        <div>
+            <label for="val3">Weitere Daten</label>
+            <input id="val3" v-model="val3">
+        </div>
+        <button @click="send">Send</button>
+    </div>
+</body>
+
+<script>
+
+let app;
+app = new Vue({
+    el: '#app',
+    data: {
+        val1: '8°C',
+        val2: '23°C',
+        val3: '1234',
+    },
+    methods: {
+        send: function() {
+            window.websocket.send('val1=' + this.val1);
+            window.websocket.send('val2=' + this.val2);
+            window.websocket.send('val3=' + this.val3);
+        }
+    }
+})
+
+function initSocket() {
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+    var connection = new WebSocket(`ws://${window.location.host}`);
+    window.websocket = connection || { send: function() {} };
+
+    connection.onopen = function () {
+        console.log("Websocket connected");
+    };
+
+    connection.onerror = function (error) {
+        console.log(error);
+        return null;
+    };
+
+    connection.onclose = function (c) {
+        app.problem = 'Websocket disconnected!';
+    }
+
+    connection.onmessage = function (message) {
+        console.log('%c>%c' + message.data.split('=')[0] + '%c=' + message.data.split('=').splice(1).join('='),
+            'background: #ffffff22;padding: 2px 5px;margin: 0 5px 0 0;border-radius: 3px;color: orange',
+            'background: #ffffff22;padding: 2px 0 2px 5px;margin: 0;border-radius: 3px 0 0 3px;font-weight: 600;color: orange',
+            'background: #ffffff22;padding: 2px 5px 2px 0;margin: 0;border-radius: 0 3px 3px 0'
+        );
+
+        var mes = message.data;
+        var data = '';
+        if(mes.includes('=')) {
+            mes = mes.split('=')[0];
+            data = message.data.substring(mes.length + 1);
+        }
+
+        // ...
+    }
+}
+initSocket();
+
+</script>
+<style>
+
+* {
+    color: #eeeeee;
+    font-family: 'Montserrat', 'Roboto', sans-serif;
+}
+
+html, body, #app {
+    background-color: #040211;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* */
+
+#app {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 50px !important;
+    height: calc(100vh - 100px) !important;
+    width: calc(100vw - 100px) !important;
+}
+
+#app > div {
+    display: block;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+}
+
+label {
+    opacity: .7;
+}
+
+input {
+    width: calc(100% - 20px);
+    margin-top: 5px;
+    padding: 10px 10px;
+    background: #ffffff05;
+    border: none;
+    border-bottom: 2px solid #eeeeee !important;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    border: none;
+    background: #ffffff22;
+    padding: 15px 0;
+    border-radius: 5px;
+    font-size: 20px;
+    outline: none;
+}
+
+</style>
+</html>

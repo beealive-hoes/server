@@ -33,9 +33,9 @@
             <h2>Live-Daten</h2>
             <!-- Placeholder data, remove later -->
             <div class="row">
-                <dataset name="Außentemperatur" value="8°C"></dataset>
-                <dataset name="Innentemperatur" value="23°C"></dataset>
-                <dataset name="Weitere Daten" value="1234"></dataset>
+                <dataset name="Außentemperatur" :value="data.val1"></dataset>
+                <dataset name="Innentemperatur" :value="data.val2"></dataset>
+                <dataset name="Weitere Daten" :value="data.val3"></dataset>
             </div>
             <div class="row">
                 <span style="padding-bottom: 30px;">Platz für graphen, etc</span>
@@ -52,6 +52,7 @@
     
     <script src="./app/app.js"></script>
     <!-- <script src="./app/util.js"></script> -->
+    <script src="./app/socket.js"></script>
     <script src="./app/main.js"></script>
 </body>
 </html>
