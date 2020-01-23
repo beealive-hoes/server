@@ -17,6 +17,11 @@ app = new Vue({
         stream: {
             available: false,
             source: ''
+        },
+        data: {
+            val1: '8°C',
+            val2: '23°C',
+            val3: '1234',
         }
     },
     methods: {
