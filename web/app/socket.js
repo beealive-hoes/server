@@ -1,4 +1,9 @@
 
+/*
+ * Do not add any code to this file that does not belong here. Thanks.
+ */
+
+
 let _socket_handler = [];
 
 /** Handler needs to be a function that takes (key, value) => ... */

@@ -10,11 +10,20 @@ const chalk = require('chalk');
 import { router as pingRouter } from "./routes/ping.router";
 import { router as mainRouter } from "./routes/main.router";
 import { router as indexRouter } from "./routes/index.router";
+import { router as apiRouter, registerApiEndpoint, sealApiEndpoints } from "./routes/api.router";
+import { router as videoRouter } from "./routes/video.router";
 import sockethandler from './sockethandler';
+import PingApiEndpoint from './routes/api/ping.api';
+import StreamApiEndpoint from './routes/api/stream.api';
+import NextVideoApiEndpoint from './routes/api/nextVideo.api';
 
 
 export let uidTokens = [];
 
+/**
+ * Do not change the order in which things get loaded / started / initialized etc.
+ * Chaning the order might result in things not working the way they should.
+ */
 export let start = async function(port: number) {
     let app = express();
 
@@ -22,9 +31,17 @@ export let start = async function(port: number) {
     app.use(helmet());
     app.use(express.json());
 
+    registerApiEndpoint(new PingApiEndpoint());
+    registerApiEndpoint(new StreamApiEndpoint());
+    registerApiEndpoint(new NextVideoApiEndpoint());
+    // Add new api endpoints here
+    sealApiEndpoints();
+
     app.use(pingRouter);
     app.use(mainRouter);
     app.use(indexRouter);
+    app.use(apiRouter);
+    app.use(videoRouter);
 
     let server = http.createServer(app);
     let wss = new WebSocket.Server({ server });
