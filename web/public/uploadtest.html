@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Upload Test</title>
+</head>
+<body>
+
+  <h3>README:</h3>
+
+  <span> Diese Datei wurde / wird dazu benutzt, zu testen wie das mit dem "livestream" hochladen so funktioniert. </span> <br>
+  <span> Wir laden, wie bekannt sein sollte nämlich einfach eine Video Datei vom Bienenstock hoch. Diese Seite soll </span> <br>
+  <span> dafür den Bienenstock demonstrieren und erlaubt uns eine Datei an den Server zu schicken um zu testen, ob </span> <br>
+  <span> dieser die Datei richtig verarbeitet. Bitte nicht ohne Rücksprache ausprobieren, da dadurch Fehler </span> <br>
+  <span> auftreten könnten. </span> <br>
+
+  <hr>
+
+  <input type="file" id="upload">
+  <button onclick="doUpload()">Hochladen</button>
+  
+</body>
+
+<script>
+
+function doUpload() {
+  let file = document.getElementById('upload').files[0];
+  if(!file) alert("Bitte Datei auswählen!");
+
+  var formData = new FormData();
+  formData.append('datei', file);
+
+  var req = new XMLHttpRequest();
+  req.open("POST", '/api/stream');
+  req.onload = function(event) { alert(event.target.responseText); };
+  req.send(formData);
+}
+
+</script>
+</html>

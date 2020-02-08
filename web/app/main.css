@@ -51,6 +51,12 @@ html, body, #app {
     height: 100%;
 }
 
+#livestream > .container {
+    display: flex;
+    align-items: center;
+    background-color: var(--background);
+}
+
 #livestream > .container > video {
     width: 100%;
 }

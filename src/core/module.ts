@@ -1,4 +1,8 @@
 
+/*
+ * THIS CLASS IS CURRENTLY NOT USED
+ */
+
 
 let config = require('../../../conf/config.json');
 
@@ -13,13 +17,13 @@ export default abstract class Module {
 
     //
 
-    public static allModules: Module[] = [];
+    public static allModules: Map<string, Module> = new Map();
 
     public static loadModules() {
-        Module.allModules = [];
+        Module.allModules = new Map;
         for (let name of config.modules) {
             let mod = new (require(`../modules/${name}.module`).default)();
-            Module.allModules.push(mod);
+            Module.allModules.set(mod, mod);
             mod.init();
         }
     }

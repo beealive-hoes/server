@@ -20,7 +20,7 @@
     <div id="app">
         <div id="livestream">
             <div class="container" v-if="stream.available">
-                <video :src="stream.source"></video>
+                <video id="video" :src="stream.source">A fatal error occured.</video>
             </div>
             <div class="standby" v-if="!stream.available">
                 <div class="cover">
@@ -30,7 +30,7 @@
         </div>
 
         <div id="livedata">
-            <h2>Live-Daten</h2>
+            <h2 onclick="window.__dev&&startVideo()">Live-Daten</h2>
             <!-- Placeholder data, remove later -->
             <div class="row">
                 <dataset name="Außentemperatur" :value="data.val1"></dataset>
