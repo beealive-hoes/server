@@ -72,7 +72,7 @@ function init() {
 
     setTimeout(() => {
         document.body.classList.remove('intro');
-    }, window.__dev ? 0 : 10_000);
+    }, window.__dev ? 0 : 10000);
 
 }
 init();
