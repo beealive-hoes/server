@@ -1,5 +1,9 @@
 
-window.__dev = true;
+// Dev mode is enabled if you add a ?dev to the page url
+// e.g. goto http://localhost:9010/?dev
+window.__dev = location.search.includes('dev');
+
+//
 
 const API = {
     base: 'http://localhost:9010/api',
@@ -47,7 +51,7 @@ function stopVideo() {
 
 function onVideoEnded() {
     let video = document.getElementById('video');
-    fetch(API.endpoints.nextVideo)
+    fetch(API.endpoints.nextVideo) // ein 502 hier ist einfach zu ignorieren :)
         .then(() => {
             app.stream.source = 'http://localhost:9010/video/current.mp4?' + Date.now(); // to prevent browser caching since it's the same base url
             video.currentTime = 0;
@@ -65,6 +69,10 @@ function init() {
         if (['val1', 'val2', 'val3'].includes(key))
             Vue.set(app.data, key, value);
     });
+
+    setTimeout(() => {
+        document.body.classList.remove('intro');
+    }, window.__dev ? 0 : 10_000);
 
 }
 init();
