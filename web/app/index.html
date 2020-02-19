@@ -12,15 +12,43 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600|Roboto+Mono" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
-    <link rel="stylesheet" type="text/css" href="./app/theme.css">
-    <link rel="stylesheet" type="text/css" href="./app/main.css">
+    <link rel="stylesheet" type="text/css" href="./app/theme.min.css">
+    <link rel="stylesheet" type="text/css" href="./app/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
-<body>
+<body class="intro">
+    <div id="intro">
+        <h1>BeeAlive</h1>
+        <div class="table">
+            <div class="column">
+                <div class="entry">
+                    <div class="title">Projektleitung</div>
+                    <div class="content">Kai Eichner</div>
+                </div>
+                <div class="entry">
+                    <div class="title">Hier natürlich</div>
+                    <div class="content">noch alle Anderen
+                                    <br> eintragen, danke.</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="entry">
+                    <div class="title">Programmierung</div>
+                    <div class="content">Alex Vogelsang
+                                    <br> Andreas May</div>
+                </div>
+                <div class="entry">
+                    <div class="title">Elektronik</div>
+                    <div class="content">Fabian Schmid</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="app">
         <div id="livestream">
             <div class="container" v-if="stream.available">
-                <video id="video" :src="stream.source">A fatal error occured.</video>
+                <video id="video" :src="stream.source" muted>A fatal error occured.</video>
             </div>
             <div class="standby" v-if="!stream.available">
                 <div class="cover">

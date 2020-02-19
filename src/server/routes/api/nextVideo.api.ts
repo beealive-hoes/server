@@ -9,7 +9,8 @@ export default class NextVideoApiEndpoint extends ApiEndpoint {
     super (
       'get',
       'nextVideo',
-      'When called, popps the video stack and by doing so, changes the next part of the whole video to current.mp4'
+      'When called, popps the video stack and by doing so, changes the next part of the whole video to current.mp4',
+      'localhost'
     );
   }
   

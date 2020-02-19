@@ -21,11 +21,13 @@ Does the rest. Please put everything here that does directly belongs to vue.js o
 
 # CSS files
 
-## theme.css
+## theme.scss
 Welp, I guess I messed up
 
-## main.css
+## main.scss
 The other css stuff
+
+! DO NOT EDIT ANY .css FILES, they will get overwritten by the sass compiler !
 
 ---
 
