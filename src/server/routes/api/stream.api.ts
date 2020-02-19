@@ -13,6 +13,7 @@ export default class StreamApiEndpoint extends ApiEndpoint {
       'post',
       'stream',
       'Used to upload the video file.',
+      'authorized',
       upload.single('datei')
     );
   }

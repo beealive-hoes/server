@@ -1,0 +1,202 @@
+
+body, body > * {
+    --background: #000000;
+    --text: #FFFFFF;
+    --divider: #FFFFFF33;
+}
+
+/* */
+
+* {
+    color: var(--text);
+    font-family: 'Montserrat', 'Roboto', sans-serif;
+}
+
+html, body, #app {
+    background-color: var(--backpage);
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* */
+
+#app {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+body.intro #app { transform: translateY(100vh); }
+
+/*
+ * Intro
+ */
+
+#intro {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background);
+    transition: transform 2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transform: translateY(-100vh);
+    z-index: 1000;
+
+    h1 {
+        width: 100%;
+        text-align: center;
+        color: var(--text);
+        margin: 0px;
+        padding: 100px 0;
+        font-size: 10vh;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .table {
+        display: flex;
+        justify-content: center;
+    }
+
+    .column {
+        margin: 0 50px;
+    }
+
+    .entry {
+        width: 500px;
+        display: flex;
+        margin-bottom: 20px;
+
+        * { width: 50%; }
+
+        .title {
+            font-size: 2.2vh;
+            font-weight: 400;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .content {
+            font-size: 2.7vh;
+            font-weight: 600;
+            text-align: left;
+        }
+    }
+}
+body.intro #intro { transform: translateY(0); }
+
+/*
+ * Livestream Seite
+ */
+
+#livestream {
+    height: 100vh;
+    width: 133vh;
+    background: gray;
+    position: relative;
+
+    & > * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        background-color: var(--background);
+
+        video {
+            width: 100%;
+        }
+    }
+
+    .standby {
+        width: 100%;
+        height: 100%;
+        background-image: url('/assets/standby.png');
+        background-size: cover;
+        background-position: center;
+
+        .cover {
+            width: 100%;
+            height: 100%;
+            background: #000000CC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    h3 {
+        color: white;
+        margin: 0;
+        font-size: 5vh;
+        text-shadow: 0 0 5px #000000CC;
+    }
+}
+
+/*
+ * Daten Seite
+ */
+
+#livedata {
+    height: 100vh;
+    width: calc(100vw - 133vh);
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-self: center;
+}
+
+h2 {
+    color: var(--text);
+    margin: 0px;
+    padding: 30px;
+    font-size: 4vh;
+    text-align: center;
+    font-weight: 400;
+    border-bottom: 1px solid var(--divider);
+}
+
+.row {
+    padding: 30px 30px 0 30px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--divider);
+}
+
+/*
+ * Components
+ */
+
+.dataset {
+    display: flex;
+    flex-direction: column;
+
+    .value {
+        color: var(--text);
+        font-size: 4vh;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .name {
+        color: var(--text);
+        font-size: 2vh;
+        padding: 10px 0 30px 0;
+        text-align: center;
+        font-weight: 400;
+    }
+}

@@ -16,6 +16,8 @@ import sockethandler from './sockethandler';
 import PingApiEndpoint from './routes/api/ping.api';
 import StreamApiEndpoint from './routes/api/stream.api';
 import NextVideoApiEndpoint from './routes/api/nextVideo.api';
+import RequestAccessEndpoint from './routes/api/requestAccess.api';
+import AuthEndpoint from './routes/api/auth.api';
 
 
 export let uidTokens = [];
@@ -34,6 +36,8 @@ export let start = async function(port: number) {
     registerApiEndpoint(new PingApiEndpoint());
     registerApiEndpoint(new StreamApiEndpoint());
     registerApiEndpoint(new NextVideoApiEndpoint());
+    registerApiEndpoint(new RequestAccessEndpoint());
+    registerApiEndpoint(new AuthEndpoint());
     // Add new api endpoints here
     sealApiEndpoints();
 
