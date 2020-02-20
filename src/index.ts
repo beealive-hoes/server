@@ -7,7 +7,7 @@ let config = require('../config.json');
 function start() {
   console.log(chalk.green('Starting Server ...'));
 
-  server.start(config.port, true);
+  server.start(config.port, false);
 
 }
 start();
