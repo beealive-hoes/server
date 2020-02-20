@@ -6,15 +6,15 @@ window.__dev = location.search.includes('dev');
 //
 
 const API = {
-    base: 'http://localhost:9010/api',
+    base: location.origin + '/api',
     endpoints: {
-        nextVideo: 'http://localhost:9010/api/nextVideo'
+        nextVideo: location.origin + '/api/nextVideo'
     }
 }
 
 
 function startVideo() {
-    fetch('http://localhost:9010/video/current.mp4')
+    fetch(location.origin + '/video/current.mp4')
         .then(res => {
             if (res.ok) {
                 let doInit = !app.stream.available;
@@ -53,7 +53,7 @@ function onVideoEnded() {
     let video = document.getElementById('video');
     fetch(API.endpoints.nextVideo) // ein 502 hier ist einfach zu ignorieren :)
         .then(() => {
-            app.stream.source = 'http://localhost:9010/video/current.mp4?' + Date.now(); // to prevent browser caching since it's the same base url
+            app.stream.source = location.origin + '/video/current.mp4?' + Date.now(); // to prevent browser caching since it's the same base url
             video.currentTime = 0;
             app.$nextTick(() => video.play());
         })
