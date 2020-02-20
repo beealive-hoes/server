@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as http from 'http';
 import * as https from 'https';
 import * as WebSocket from 'ws';
 import * as fs from "fs";
@@ -21,14 +22,14 @@ import RequestAccessEndpoint from './routes/api/requestAccess.api';
 import AuthEndpoint from './routes/api/auth.api';
 
 
-export let uidTokens = [];
+export const uidTokens = [];
 
 /**
  * Do not change the order in which things get loaded / started / initialized etc.
  * Chaning the order might result in things not working the way they should.
  */
-export let start = async function(port: number) {
-    let app = express();
+export const start = async function(port: number, ssh: boolean) {
+    const app = express();
 
     app.use(morgan('tiny'));
     app.use(helmet());
@@ -48,11 +49,13 @@ export let start = async function(port: number) {
     app.use(apiRouter);
     app.use(videoRouter);
 
-    let server = https.createServer({
-        key: fs.readFileSync('./ssl/server.key'),
-        cert: fs.readFileSync('./ssl/server.cert')
-    }, app);
-    let wss = new WebSocket.Server({ server });
+    const server = ssh
+        ? https.createServer({
+            key: fs.readFileSync('./ssl/server.key'),
+            cert: fs.readFileSync('./ssl/server.cert')
+          }, app)
+        : http.createServer(app);
+    const wss = new WebSocket.Server({ server });
 
     sockethandler(wss);
 
