@@ -1,6 +1,7 @@
 import * as express from 'express';
-import * as http from 'http';
+import * as https from 'https';
 import * as WebSocket from 'ws';
+import * as fs from "fs";
 
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -47,7 +48,10 @@ export let start = async function(port: number) {
     app.use(apiRouter);
     app.use(videoRouter);
 
-    let server = http.createServer(app);
+    let server = https.createServer({
+        key: fs.readFileSync('./ssl/server.key'),
+        cert: fs.readFileSync('./ssl/server.cert')
+    }, app);
     let wss = new WebSocket.Server({ server });
 
     sockethandler(wss);
