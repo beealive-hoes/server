@@ -16,7 +16,7 @@ app = new Vue({
     data: {
         stream: {
             available: false,
-            source: 'http://localhost:9010/video/current.mp4'
+            source: location.origin + '/video/current.mp4'
         },
         data: {
             val1: '8°C',
