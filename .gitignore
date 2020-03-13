@@ -3,3 +3,5 @@
 package-lock.json
 /ssl/server.key
 /video
+/sql/passwords.md
+config.json

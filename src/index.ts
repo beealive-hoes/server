@@ -1,13 +1,16 @@
 import * as chalk from "chalk";
 import * as server from "./server/server";
+import Database from "./database/Database";
 
 let config = require('../config.json');
 
 
-function start() {
-  console.log(chalk.green('Starting Server ...'));
+async function start() {
+  
+  await Database.connect(config.mysql);
 
-  server.start(config.port, false);
+  await server.start(config.port, false);
+
 
 }
 start();
