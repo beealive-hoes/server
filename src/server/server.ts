@@ -3,11 +3,9 @@ import * as http from 'http';
 import * as https from 'https';
 import * as WebSocket from 'ws';
 import * as fs from "fs";
-
-const morgan = require('morgan');
-const helmet = require('helmet');
-
-const chalk = require('chalk');
+import * as chalk from "chalk";
+import * as morgan from "morgan";
+import * as helmet from "helmet";
 
 import { router as pingRouter } from "./routes/ping.router";
 import { router as mainRouter } from "./routes/main.router";
@@ -20,6 +18,7 @@ import StreamApiEndpoint from './routes/api/stream.api';
 import NextVideoApiEndpoint from './routes/api/nextVideo.api';
 import RequestAccessEndpoint from './routes/api/requestAccess.api';
 import AuthEndpoint from './routes/api/auth.api';
+import DataApiEndpoint from './routes/api/data.api';
 
 
 export const uidTokens = [];
@@ -28,38 +27,42 @@ export const uidTokens = [];
  * Do not change the order in which things get loaded / started / initialized etc.
  * Chaning the order might result in things not working the way they should.
  */
-export const start = async function(port: number, ssh: boolean) {
-    const app = express();
+export const start = async function (port: number, ssh: boolean) {
+  console.log(chalk.yellowBright('Starting Server ...'));
 
-    app.use(morgan('tiny'));
-    app.use(helmet());
-    app.use(express.json());
+  const app = express();
 
-    registerApiEndpoint(new PingApiEndpoint());
-    registerApiEndpoint(new StreamApiEndpoint());
-    registerApiEndpoint(new NextVideoApiEndpoint());
-    registerApiEndpoint(new RequestAccessEndpoint());
-    registerApiEndpoint(new AuthEndpoint());
-    // Add new api endpoints here
-    sealApiEndpoints();
+  app.use(morgan('tiny'));
+  app.use(helmet());
+  app.use(express.json());
 
-    app.use(pingRouter);
-    app.use(mainRouter);
-    app.use(indexRouter);
-    app.use(apiRouter);
-    app.use(videoRouter);
+  registerApiEndpoint(new PingApiEndpoint());
+  registerApiEndpoint(new AuthEndpoint());
+  registerApiEndpoint(new RequestAccessEndpoint());
+  registerApiEndpoint(new NextVideoApiEndpoint());
+  registerApiEndpoint(new StreamApiEndpoint());
+  registerApiEndpoint(new DataApiEndpoint());
+  // Add new api endpoints here
+  sealApiEndpoints();
 
-    const server = ssh
-        ? https.createServer({
-            key: fs.readFileSync('./ssl/server.key'),
-            cert: fs.readFileSync('./ssl/server.cert')
-          }, app)
-        : http.createServer(app);
-    const wss = new WebSocket.Server({ server });
+  app.use(pingRouter);
+  app.use(mainRouter);
+  app.use(indexRouter);
+  app.use(apiRouter);
+  app.use(videoRouter);
 
-    sockethandler(wss);
+  const server = ssh
+    ? https.createServer({
+      key: fs.readFileSync('./ssl/server.key'),
+      cert: fs.readFileSync('./ssl/server.cert')
+    }, app)
+    : http.createServer(app);
+  const wss = new WebSocket.Server({ server });
 
-    server.listen(port || 9010, () => {
-        console.log(`Server listening on port ${chalk.yellowBright(port || 9010)}`);
-    });
+  sockethandler(wss);
+
+  server.listen(port || 9010, () => {
+    console.log(chalk.greenBright(`Server listening on port ${chalk.black.bgGreenBright(` ${port || 9010} `)}`)
+              + chalk.gray(`   ${ssh ? 'https' : 'http'}://127.0.0.1:${port || 9010}/`));
+  });
 }

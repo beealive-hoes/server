@@ -12,7 +12,7 @@ export default class RequestAccessEndpoint extends ApiEndpoint {
     super (
       'get',
       'requestAccess',
-      'Request this endpoint to recieve a token. Append this token to you client secret and perform a md5 hash on the whole to gain your access token. The recieved token is valid for 10 seconds.',
+      'Request this endpoint to recieve a token. Append this token to your client secret and perform a md5 hash on the whole to gain your access token. The recieved token is valid for 10 seconds.',
       'public'
     );
   }

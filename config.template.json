@@ -1,0 +1,8 @@
+{
+  "port": 9010,
+  "mysql": {
+    "host": "localhost",
+    "user": "abc",
+    "password": "indeed a very strong password here"
+  }
+}
