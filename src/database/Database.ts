@@ -2,12 +2,6 @@ import * as mysql from "mysql";
 import * as chalk from "chalk";
 
 
-
-const shortTermTableName = 'data_short';
-const longTermTableName = 'data_long';
-const datasets = [ 'microphone' ];
-
-
 export type DbSettings = {
   host: string,
   user: string,
@@ -42,34 +36,21 @@ export default class Database {
 
   //
 
-  public static saveShortTermData(timestamp: number, type: string, value: number) {
-    // TODO push day's min, max & avr to long term db
-    const sql = `
-      SELECT 1
-      FROM \`beealive\`.\`${shortTermTableName}\`
-      WHERE \`timestamp\` = '${timestamp}';
-      `;
+  public static saveData(timestamp: number, data: { humidity1?: number, temperature1?: number, airpressure1?: number, humidity2?: number, temperature2?: number, airpressure2?: number, weight?: number, volume?: number, wind?: number, rain?: number }) {
+    const fields = [ 'timestamp' ];
+    const values = [ timestamp ];
+
+    for (const set of [ 'humidity1', 'temperature1', 'airpressure1', 'humidity2', 'temperature2', 'airpressure2', 'weight', 'volume', 'wind', 'rain' ]) {
+      if (!data[set]) continue;
+      fields.push(set);
+      values.push(data[set]);
+    }
+
+    const sql = `INSERT INTO beealive.data (${fields.join(', ')}) VALUES (${values.map(v => `'${v}'`).join(', ')});`;
+
     this.connection.query(sql, (err, res) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      
-      const insertValues = [ timestamp ];
-      for (let i = 0; i < datasets.length; i++) insertValues.push(0);
-      insertValues[datasets.indexOf(type)] = value;
-
-      const sql = res.length
-        ? `UPDATE \`beealive\`.\`${shortTermTableName}\` SET \`${type}\`='${value}' WHERE \`timestamp\`='${timestamp}';`
-        : `INSERT INTO \`beealive\`.\`${shortTermTableName}\` (\`timestamp\`, ${datasets.map(s => `\`${s}\``).join(', ')}) VALUES ('${timestamp}', '${value}');`;
-
-        console.log(res)
-        console.log(sql)
-
-      this.connection.query(sql, (err, res) => {
-        if (err) console.error(err);
-        else console.log(':+1:');
-      });
+      if (err) console.error(err);
+      else console.log(sql)
     });
   }
 

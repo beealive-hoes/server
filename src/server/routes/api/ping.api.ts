@@ -5,7 +5,7 @@ export default class PingApiEndpoint extends ApiEndpoint {
 
   constructor() {
     super (
-      'post',
+      'all',
       'ping',
       'This endpoint was created for the purpose of checking if api endpoints get loaded in properly. If you see this somewhere else than in the code that means everything works as it should. nice.',
       'public'
@@ -13,7 +13,7 @@ export default class PingApiEndpoint extends ApiEndpoint {
   }
   
   handle(req: Request, res: Response, next: NextFunction): void {
-    res.status(200).send(req.body);
+    res.status(200).json({ message: 'pong', success: true, body: req.body });
   }
 
 }

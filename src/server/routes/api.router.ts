@@ -9,7 +9,7 @@ export const router = Router();
 export abstract class ApiEndpoint {
 
   constructor (
-    public method: 'get' | 'post' | 'put' | 'delete',
+    public method: 'get' | 'post' | 'put' | 'delete' | 'all',
     public path: string,
     public description: string,
     public authMode: 'public' | 'authorized' | 'localhost',
@@ -29,7 +29,7 @@ export function registerApiEndpoint(endpoint: ApiEndpoint) {
     if (typeof endpoint.middleware[Symbol.iterator] == 'function') middleware = [ ...endpoint.middleware ];
     else middleware = [ endpoint.middleware ];
   }
-  router[endpoint.method](`/api/${endpoint.path}`, ...middleware, (req: Request, res: Response, next: NextFunction) => {
+  router[endpoint.method](`/${endpoint.path}`, ...middleware, (req: Request, res: Response, next: NextFunction) => {
     if (endpoint.authMode == 'localhost') {
       if (!req.hostname.includes('localhost') && !req.host.includes('127.0.0.1')) {
         res.status(403).send({ error: 403, message: 'Forbidden', description: 'You are not allowed to access this endpoint.' });
@@ -48,8 +48,8 @@ export function registerApiEndpoint(endpoint: ApiEndpoint) {
 
 //
 
-let handlerDocs = (req: Request, res: Response, next: NextFunction) => {
-  let out = {
+const handlerDocs = (req: Request, res: Response, next: NextFunction) => {
+  const out = {
     description: 'Api docs. Endpoints are listed below. For a more readable version, head over to /api/docs.html',
     endpoints: endpoints.map(e => { return {
       method: e.method,
@@ -58,13 +58,11 @@ let handlerDocs = (req: Request, res: Response, next: NextFunction) => {
       authMode: e.authMode
     }})
   };
-  res.writeHead(200, { 'Content-Type': 'text' });
-  res.end(JSON.stringify(out, null, 4), 'utf8');
+  res.status(200).send(JSON.stringify(out, null, 2));
 }
 
-let handlerDocsHtml = (req: Request, res: Response, next: NextFunction) => {
-  // Note that this is a terrible way to code. Don't do that.
-  let out = `<!DOCTYPE html><html lang="en"><body>
+const handlerDocsHtml = (req: Request, res: Response, next: NextFunction) => {
+  const out = `<!DOCTYPE html><html lang="en"><body>
     <h1>Api endpoints</h1>
     <h5>JSON-Version can be found here: /api/docs</h5>
     <hr>
@@ -84,31 +82,15 @@ let handlerDocsHtml = (req: Request, res: Response, next: NextFunction) => {
         </tr>
       ` ).join('') }
     </table></body><style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 10px }</style></html>`;
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end(out, 'utf8');
+    res.status(200).send(out);
 }
 
-let handler404 = (req: Request, res: Response, next: NextFunction) => {
-  res.status(404).send({ error: 404, message: 'Not Found', description: 'Invalid api endpoint. Goto /api/docs for a overview over all the endpoints.' });
+const handler404 = (req: Request, res: Response, next: NextFunction) => {
+  res.status(404).json({ error: 404, message: 'Not Found', description: 'Invalid api endpoint. Goto /api/docs for a overview over all the endpoints.' });
 }
 
 export function sealApiEndpoints() {
-  router.get   ( "/api/docs", handlerDocs );
-  router.post  ( "/api/docs", handlerDocs );
-  router.put   ( "/api/docs", handlerDocs );
-  router.delete( "/api/docs", handlerDocs );
-  
-  router.get   ( "/api/docs.html", handlerDocsHtml );
-  router.post  ( "/api/docs.html", handlerDocsHtml );
-  router.put   ( "/api/docs.html", handlerDocsHtml );
-  router.delete( "/api/docs.html", handlerDocsHtml );
-
-  router.get   ( "/api", handler404 );
-  router.post  ( "/api", handler404 );
-  router.put   ( "/api", handler404 );
-  router.delete( "/api", handler404 );
-  router.get   ( "/api/*", handler404 );
-  router.post  ( "/api/*", handler404 );
-  router.put   ( "/api/*", handler404 );
-  router.delete( "/api/*", handler404 );
+  router.all( "/docs", handlerDocs );
+  router.all( "/docs.html", handlerDocsHtml );
+  router.all( "*", handler404 );
 }
