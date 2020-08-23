@@ -9,7 +9,7 @@ async function start() {
   
   await Database.connect(config.mysql);
 
-  await server.start(config.port, false);
+  await server.start(config.port);
 
 
 }
